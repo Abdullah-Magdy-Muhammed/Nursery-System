@@ -1,31 +1,59 @@
 const { response } = require("express");
+const mongoose = require("mongoose");
+require("./../Model/classModel");
 
-exports.getAllClass = (request, response) => {
-    response.status(200).json({ message: "Fetch all Childrens" });
+const ClassSchema = mongoose.model("class");
+
+exports.getAllClass = (request, response, next) => {
+    ClassSchema.find()
+        .then((data) => {
+            response.status(200).json(data);
+        })
+        .catch((error) => next(error))
 }
-exports.addClass = (request, response) => {
-    response.status(201).json({ message: "Add Childrens" });
+
+exports.addClass = (request, response, next) => {
+    let newClass = new ClassSchema({
+        _id: request.body.id,
+        name: request.body.name,
+        supervisor: request.body.supervisor,
+        children: request.body.children
+    });
+    newClass.save()
+        .then(result => {
+            response.status(201).json(result);
+        })
+        .catch(error => next(error))
 }
-exports.updateClass = (request, response) => {
-    response.status(200).json({ message: "Update Childrens" });
+exports.updateClass = (request, response, next) => {
+    ClassSchema.updateOne({
+        _id: request.body.id
+    }, {
+        $set: {
+            name: request.body.name,
+            supervisor: request.body.supervisor,
+            children: request.body.children
+        }
+    }).then(result => {
+        response.status(200).json({ "message": "Class is updated" })
+    })
+        .catch(error => next(error))
 }
-exports.deleteClass = (request, response) => {
-    response.status(200).json({ message: "Delete Childrens" });
-}
+
 exports.getClassByID = (request, response, next) => {
-
-    response.status(201).json({ data: request.params.id })
-
+    ClassSchema.findById(request.params.id)
+        .then((data) => {
+            response.status(200).json(data)
+        })
+        .catch(error => next(error))
 }
 exports.deleteClassByID = (request, response, next) => {
-
-    response.status(200).json({ deletedClassData: request.params.id })
+    ClassSchema.findByIdAndDelete(request.params.id)
+        .then(() => {
+            response.status(200).json({ "message": "This Class is deleted" })
+        })
 }
-exports.getClassByID = (request, response, next) => {
 
-    response.status(200).json({ data: request.params.id })
-
-}
 exports.getClassChildren = (request, response, next) => {
 
     response.status(200).json({ data: request.params.children })

@@ -4,6 +4,13 @@ const router = express.Router();
 const validator = require("./../Middlewares/errorValidation");
 const controller = require('./../Controller/childController')
 
+// function to validate address
+
+// const createAddressValidators = (path: string) => [
+//     body(`${path}.street`).isLength({ min: 3 }),
+//     body(`${path}.number`).exists(),
+// ];
+
 router.route("/child")
     .get(controller.getAllChild)
     .post([
@@ -15,12 +22,14 @@ router.route("/child")
             max: 15
         }).withMessage("Child age between 5 to 15"),
         body("level").isIn(["PreKG", "KG1", "KG2"]).withMessage("Your level should in PreKG, KG1, KG2"),
-        body("address").isString().withMessage("Please Enter valid address")
+        body("address").isObject().withMessage("Address  must be a object"),
+        body("address.city").isString().withMessage("City should be a string"),
+        body("address.street").isString().withMessage("Street should be string"),
+        body("address.building").isNumeric().withMessage("Building should be number")],
 
-    ],
         validator, controller.addChild)
     .put(controller.updateChild)
-    .delete(controller.deleteChild)
+    .delete(controller.deleteChildByID)
 
 
 

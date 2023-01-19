@@ -31,4 +31,5 @@ router.get("/classchildern/:id",
 
 router.get("/classTeacher/:id",
     controller.getClassTeacher)
+
 module.exports = router;

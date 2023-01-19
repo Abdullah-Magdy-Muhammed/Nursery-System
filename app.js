@@ -5,13 +5,25 @@ const teacherRouter = require("./Routes/teacherRouter");
 const childRouter = require("./Routes/childRouter");
 const classRouter = require("./Routes/classRouter")
 const body_parser = require("body-parser");
+const { default: mongoose } = require("mongoose");
 
 
 let port = process.env.PORT || 8080;
 
-server.listen(port, () => {
-    console.log("I am listening..............", port);
-});
+
+// Setting DB connections
+mongoose.set('strictQuery', true);
+mongoose.connect("mongodb://127.0.0.1:27017/nurseryDB")
+    .then(() => {
+        console.log("DB Connected");
+        server.listen(port, () => {
+            console.log("I am listening..............", port);
+        });
+    })
+    .catch(error => {
+        console.log("DB connection problem" + " " + error);
+    })
+
 
 // Morgan MW
 server.use(morgan("tiny"))

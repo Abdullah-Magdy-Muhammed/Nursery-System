@@ -25,7 +25,9 @@ router.route("/teacher")
     ],
         validator, controller.addTeacher)
     .put(controller.updateTeacher)
-    .delete(controller.deleteTeacher)
+
+router.get("/teacher/:id",
+    controller.getTeacherByID)
 
 router.delete("/teacher/:id",
     controller.deleteTeacherByID)
