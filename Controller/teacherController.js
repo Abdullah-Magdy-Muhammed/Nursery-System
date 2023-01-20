@@ -15,7 +15,7 @@ exports.getAllTeachers = (request, response, next) => {
 
 exports.addTeacher = (request, response, next) => {
     let newTeacher = new TeacherSchema({
-        _id: request.body.id,
+        _id: mongoose.Types.ObjectId(),
         fullName: request.body.fullName,
         password: request.body.password,
         email: request.body.email,

@@ -9,8 +9,7 @@ const router = express.Router();
 router.route("/teacher")
     .get(controller.getAllTeachers)
     .post([
-        body("id").isInt().withMessage("Id should be integer"),
-        body("fullName").isAlpha().withMessage("Full Name should be string")
+        body("fullName").isString().withMessage("Full Name should be string")
             .isLength({ max: 30 }).withMessage("length of name less Than 30"),
         body("password").isStrongPassword({
             minLength: 8,

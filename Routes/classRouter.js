@@ -7,15 +7,14 @@ const controller = require('./../Controller/classController');
 router.route("/class")
     .get(controller.getAllClass)
     .post([
-        body("id").isInt().withMessage("Id should be integer"),
-        body("name").isAlpha().withMessage("Name should be string")
+        body("name").isString().withMessage("Name should be string")
             .isLength({ max: 30 }).withMessage("length of name less Than 30"),
-        body("supervisor").isInt().withMessage("Id should be integer"),
+        body("supervisor").isMongoId().withMessage("Supervisor ID should be object id"),
         body("children").isArray({ min: 10, max: 50 }).withMessage("class should have at least ten student and max 50 students"),
     ],
         validator, controller.addClass)
     .put(controller.updateClass)
-    .delete(controller.deleteClass)
+    .delete(controller.deleteClassByID)
 
 
 

@@ -14,8 +14,7 @@ const controller = require('./../Controller/childController')
 router.route("/child")
     .get(controller.getAllChild)
     .post([
-        body("id").isInt().withMessage("Id should be integer"),
-        body("name").isAlpha().withMessage("Full Name should be string")
+        body("name").isString().withMessage("Full Name should be string")
             .isLength({ max: 30 }).withMessage("length of name less Than 30"),
         body("age").isInt({
             min: 5,

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 // creating child Schema
-
 const schema = new mongoose.Schema({
     _id: Number,
     name: { type: String, required: true },
@@ -14,7 +14,8 @@ const schema = new mongoose.Schema({
             building: { type: Number, required: [true, "Building is required"] }
         }
     ]
-})
+}, { _id: false })
+schema.plugin(AutoIncrement, { id: 'child_id_counter', inc_field: '_id' });
 
 
 mongoose.model("child", schema)
