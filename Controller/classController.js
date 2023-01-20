@@ -1,10 +1,20 @@
-const mongoose = require("mongoose");
+const { response } = require("express");
+const { default: mongoose } = require("mongoose");
 require("./../Model/classModel");
+
 
 const ClassSchema = mongoose.model("class");
 
 exports.getAllClass = (request, response, next) => {
     ClassSchema.find()
+        .populate({
+            path: "supervisor",
+            select: { fullName: 1, _id: 0 }
+        })
+        .populate({
+            path: "children",
+            select: { name: 1, _id: 0 }
+        })
         .then((data) => {
             response.status(200).json(data);
         })
