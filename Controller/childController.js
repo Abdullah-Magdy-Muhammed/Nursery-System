@@ -18,6 +18,7 @@ exports.addChild = (request, response, next) => {
         _id: request.body.id,
         name: request.body.name,
         age: request.body.age,
+        level: request.body.level,
         address: request.body.address
     })
     newChild.save()
@@ -33,9 +34,18 @@ exports.updateChild = (request, response, next) => {
         $set: {
             name: request.body.name,
             age: request.body.age,
+            level: request.body.level,
             address: request.body.address
         }
     })
+        .then(result => {
+            if (result.matchedCount == 0) {
+                throw new Error("This Child is not found");
+            } else {
+                response.status(200).json({ "message": "Child is updated" })
+            }
+        })
+        .catch(error => next(error))
 }
 exports.getChildByID = (request, response, next) => {
     ChildSchema.findById(request.params.id)
@@ -46,8 +56,13 @@ exports.getChildByID = (request, response, next) => {
 }
 exports.deleteChildByID = (request, response, next) => {
     ChildSchema.findByIdAndDelete(request.params.id)
-        .then(() => {
-            response.status(200).json({ "message": "This Child is Deleted" })
+        .then((result) => {
+            if (result != null) {
+                response.status(200).json({ "message": "This Child is deleted" })
+
+            } else {
+                throw new Error("This Child is not exist")
+            }
         })
         .catch(error => next(error))
 }

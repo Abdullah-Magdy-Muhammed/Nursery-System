@@ -40,7 +40,11 @@ exports.updateTeacher = (request, response, next) => {
             image: request.body.image
         }
     }).then(result => {
-        response.status(200).json({ "message": "Teacher is updated" })
+        if (result.matchedCount == 0) {
+            throw new Error("This Teacher is not found");
+        } else {
+            response.status(200).json({ "message": "Teacher is updated" })
+        }
     })
         .catch(error => next(error))
 }
@@ -55,8 +59,14 @@ exports.getTeacherByID = (request, response, next) => {
 }
 exports.deleteTeacherByID = (request, response, next) => {
     TeacherSchema.findByIdAndDelete(request.params.id)
-        .then(() => {
-            response.status(200).json({ "message": "This Teacher is deleted" })
+        .then((result) => {
+            // console.log(result, "delete techer")
+            if (result != null) {
+                response.status(200).json({ "message": "This Teacher is deleted" })
+
+            } else {
+                throw new Error("This teacher is not exist")
+            }
         })
         .catch(error => next(error))
     // response.status(200).json({ deletedTeacherData: request.params.id })

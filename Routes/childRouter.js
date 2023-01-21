@@ -2,6 +2,7 @@ const express = require("express");
 const { body, query, param, validationResult } = require("express-validator");
 const router = express.Router();
 const validator = require("./../Middlewares/errorValidation");
+const expressValidation = require("./../Middlewares/validation")
 const controller = require('./../Controller/childController')
 
 // function to validate address
@@ -13,21 +14,8 @@ const controller = require('./../Controller/childController')
 
 router.route("/child")
     .get(controller.getAllChild)
-    .post([
-        body("name").isString().withMessage("Full Name should be string")
-            .isLength({ max: 30 }).withMessage("length of name less Than 30"),
-        body("age").isInt({
-            min: 5,
-            max: 15
-        }).withMessage("Child age between 5 to 15"),
-        body("level").isIn(["PreKG", "KG1", "KG2"]).withMessage("Your level should in PreKG, KG1, KG2"),
-        body("address").isObject().withMessage("Address  must be a object"),
-        body("address.city").isString().withMessage("City should be a string"),
-        body("address.street").isString().withMessage("Street should be string"),
-        body("address.building").isNumeric().withMessage("Building should be number")],
-
-        validator, controller.addChild)
-    .put(controller.updateChild)
+    .post(expressValidation.childValidator, validator, controller.addChild)
+    .put(expressValidation.childValidator, validator, controller.updateChild)
     .delete(controller.deleteChildByID)
 
 
