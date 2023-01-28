@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require("express");
 const morgan = require('morgan');
 const server = express();  //open server with http protocol  http://localhost:8080
@@ -9,8 +11,7 @@ const authorization = require("./Middlewares/authorization")
 const body_parser = require("body-parser");
 const { default: mongoose } = require("mongoose");
 
-
-let port = process.env.PORT || 8080;
+let port = process.env.PORT;
 
 
 // Setting DB connections
