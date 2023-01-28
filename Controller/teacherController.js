@@ -31,7 +31,7 @@ exports.addTeacher = (request, response, next) => {
 
 exports.updateTeacher = (request, response, next) => {
     TeacherSchema.updateOne({
-        _id: request.body.id
+        email: request.body.email
     }, {
         $set: {
             fullName: request.body.fullName,

@@ -3,7 +3,9 @@ const morgan = require('morgan');
 const server = express();  //open server with http protocol  http://localhost:8080
 const teacherRouter = require("./Routes/teacherRouter");
 const childRouter = require("./Routes/childRouter");
-const classRouter = require("./Routes/classRouter")
+const classRouter = require("./Routes/classRouter");
+const loginRouter = require("./Routes/authRouter");
+const authorization = require("./Middlewares/authorization")
 const body_parser = require("body-parser");
 const { default: mongoose } = require("mongoose");
 
@@ -30,7 +32,8 @@ server.use(morgan("tiny"))
 
 // Routers (End Points)
 server.use(express.json());
-
+server.use(loginRouter);
+server.use(authorization);
 server.use(teacherRouter);
 server.use(childRouter);
 server.use(classRouter)

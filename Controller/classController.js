@@ -77,7 +77,7 @@ exports.deleteClassByID = (request, response, next) => {
 
 exports.getClassChildren = (request, response, next) => {
 
-    response.status(200).json({ data: request.params.children })
+    response.status(200).json({ data: request.params.id })
 
 }
 exports.getClassTeacher = (request, response, next) => {

@@ -1,18 +1,13 @@
 const express = require("express");
 const { body, query, param, validationResult } = require("express-validator");
+const authorizationMW = require("./../Middlewares/authorization")
 const router = express.Router();
 const validator = require("./../Middlewares/errorValidation");
 const expressValidation = require("./../Middlewares/validation")
 const controller = require('./../Controller/childController')
 
-// function to validate address
-
-// const createAddressValidators = (path: string) => [
-//     body(`${path}.street`).isLength({ min: 3 }),
-//     body(`${path}.number`).exists(),
-// ];
-
 router.route("/child")
+    .all(authorizationMW.checkAdmin)
     .get(controller.getAllChild)
     .post(expressValidation.childValidator, validator, controller.addChild)
     .put(expressValidation.childValidator, validator, controller.updateChild)
@@ -21,10 +16,10 @@ router.route("/child")
 
 
 router.get("/child/:id",
-    controller.getChildByID)
+    authorizationMW.checkAdmin, controller.getChildByID)
 
 router.delete("/child/:id",
     validator,
-    controller.deleteChildByID)
+    authorizationMW.checkAdmin, controller.deleteChildByID)
 
 module.exports = router;
